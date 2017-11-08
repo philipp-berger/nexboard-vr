@@ -8,12 +8,19 @@
     "aframe-particle-system-component": "^1.0.8",
     "aframe-react": "^4.0.x",
     "babel-polyfill": "^6.3.14",
+    "express": "^4.15.2",
+    "paper": "^0.11.3",
+    "path": "^0.12.7",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "socket.io-client": "^2.0.1",
+    "webpack": "^2.5.1",
+    "webpack-hot-middleware": "^2.18.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node devServer.js",
+    "start-react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
@@ -41,6 +48,10 @@
   },
   "homepage": "https://github.com/ngokevin/aframe-react-boilerplate#readme",
   "devDependencies": {
-    "gh-pages": "^0.12.0"
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "gh-pages": "^0.12.0",
+    "html-webpack-plugin": "^2.28.0",
+    "webpack-dev-middleware": "^1.10.2"
   }
 }

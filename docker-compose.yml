@@ -1,0 +1,11 @@
+version: '2'
+services:
+  nexboard-vr:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: nexboardregistry.nexenio.com/nexboard2.0/vr:dev
+    volumes:
+      - ./src:/home/nexboard/src
+      - ./public:/home/nexboard/public
+      - ./node_modules:/home/nexboard/node_modules
