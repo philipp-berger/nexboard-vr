@@ -26,6 +26,12 @@ import Camera from './aframe-bindings/Camera.jsx'
 
 import Main from './main.jsx'
 
+var extras = require('aframe-extras');
+
+// Register a single component.
+AFRAME.registerComponent('object-model', extras.loaders["object-model"]);
+AFRAME.registerComponent('animation-mixer', extras.loaders["animation-mixer"]);
+
 class App extends React.Component {
 
   render () {

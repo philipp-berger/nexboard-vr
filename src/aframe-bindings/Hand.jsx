@@ -2,11 +2,11 @@ import React from 'React'
 import PropTypes from 'prop-types'
 import {Entity} from 'aframe-react';
 
-export default class Camera extends React.Component {
+export default class Hand extends React.Component {
 
   componentDidMount() {
-    this.camera.el.addEventListener('positionChange', (event) => this.onPositionChange(event))
-    this.camera.el.addEventListener('rotationChange', (event) => this.onRotationChange(event))
+    this.hand.el.addEventListener('positionChange', (event) => this.onPositionChange(event))
+    this.hand.el.addEventListener('rotationChange', (event) => this.onRotationChange(event))
   }
 
   onClick(event) {
@@ -15,6 +15,7 @@ export default class Camera extends React.Component {
 
   onPositionChange(event) {
     let newPosition = event.detail;
+    newPosition.y -= 1.3;
     // console.log("New Position", newPosition)
     this.props.onPositionChange(newPosition)
   }
@@ -31,27 +32,37 @@ export default class Camera extends React.Component {
 
   render() {
     return (
-      <Entity moveable primitive="a-camera" 
-        ref={ (cameraEntity) => this.camera = cameraEntity }
-        position={`${this.props.x} ${this.props.y} ${this.props.z}`} 
-        rotation={`${this.props.rotationX} ${this.props.rotationY} ${this.props.rotationZ}`}>
-        {this.props.children}
-      </Entity> 
+      <Entity position="0 -1.6 0">
+        <Entity 
+          ref={(element) => this.hand = element} 
+          hand-controls={this.props.side} 
+          class="hand" 
+          aabb-collider="objects: .grabbable;" 
+          grab
+          moveable />
+      </Entity>
     )
   }
 
 }
 
-Camera.propTypes = {
+Hand.propTypes = {
   x: PropTypes.number,
   y: PropTypes.number,
   z: PropTypes.number,
+  side: PropTypes.oneOf(['left', 'right']),
+  rotationX: PropTypes.number,
+  rotationY: PropTypes.number,
+  rotationZ: PropTypes.number,
+  onRotationChange: PropTypes.func,
+  onPositionChange: PropTypes.func
 }
 
-Camera.defaultProps = {
+Hand.defaultProps = {
   x: 0,
   y: 0,
   z: 0,
+  side: 'right',
   rotationX: 0,
   rotationY: 0,
   rotationZ: 0,

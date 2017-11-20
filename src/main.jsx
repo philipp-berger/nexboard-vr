@@ -23,21 +23,36 @@ import Button from './components/button.js'
 
 import ToolGroup from './components/ToolGroup.jsx'
 import Camera from './aframe-bindings/Camera.jsx'
+import Hand from './aframe-bindings/Hand.jsx'
 
 export default class App extends React.Component {
   
   constructor(props){
     super(props)
     this.state = {
-      rotation: {
-        x: 0,
-        y: 0,
-        z: 0,
+      camera: {
+        rotation: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
+        position: {
+          x: 0,
+          y: 0,
+          z: -1,
+        }
       },
-      position: {
-        x: 0,
-        y: 0,
-        z: -1,
+      hand: {
+        rotation: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
+        position: {
+          x: 0,
+          y: 0,
+          z: -1,
+        }
       }
     }
   }
@@ -56,32 +71,28 @@ export default class App extends React.Component {
     // console.log(hand,hand.el)
   }
 
-  onChange(newRotation) {
+  onChange(key, newRotation) {
     this.setState({
-      rotation: {
-        x: newRotation.x,
-        y: newRotation.y-180,
-        z: newRotation.z,
+      [key]:{
+        ...this.state[key],
+        rotation: {
+          x: newRotation.x,
+          y: newRotation.y,
+          z: newRotation.z,
+        }
       }
     })
   }
 
-  onChange(newRotation) {
+  onPositionChange(key, newPosition) {
     this.setState({
-      rotation: {
-        x: newRotation.x,
-        y: newRotation.y-180,
-        z: newRotation.z,
-      }
-    })
-  }
-
-  onPositionChange(newPosition) {
-    this.setState({
-      position: {
-        x: newPosition.x,
-        y: newPosition.y,
-        z: newPosition.z-1,
+      [key]:{
+        ...this.state[key],
+        position: {
+          x: newPosition.x,
+          y: newPosition.y,
+          z: newPosition.z-1,
+        }
       }
     })
   }
@@ -90,19 +101,29 @@ export default class App extends React.Component {
 
   render () {
     // <a-box color="tomato" depth="100" height="0.1" width="100" position="0 -1 0"></a-box>
-    // <a-box color="green" depth="1" height="1" width="1" position="1 0 -1"></a-box>
+    // <a-box color="green" depth="1" height="1" width="1" position="1 0 -1"></a-box> position="-14 -1.7 7"
     return (
       <Entity>
-        <a-entity gltf-model="url(/head.gltf)" scale='0.0005 0.0005 0.0005' 
-          position={`${this.state.position.x} ${this.state.position.y} ${this.state.position.z}`} 
-          rotation={`${this.state.rotation.x} ${this.state.rotation.y} ${this.state.rotation.z}`}>
-        </a-entity>
-        <a-entity gltf-model="url(/scene.gltf)" position="-14 -2.5 7" scale='0.05 0.05 0.05'>
+        <a-entity gltf-model="url(/head.gltf)" scale='0.001 0.001 0.001' 
+            position={`${this.state.camera.position.x} ${this.state.camera.position.y} ${this.state.camera.position.z}`} 
+            rotation={`${this.state.camera.rotation.x} ${this.state.camera.rotation.y} ${this.state.camera.rotation.z}`}>
+          </a-entity>
+        <a-entity object-model="src: url(/rightHand.json);" 
+          rotation={`${this.state.hand.rotation.x} ${this.state.hand.rotation.y} ${this.state.hand.rotation.z}`}
+          position={`${this.state.hand.position.x} ${this.state.hand.position.y} ${this.state.hand.position.z}`} 
+          animation-mixer="clip: Fist;"></a-entity>
+
+       
+        <a-entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4"  rotation="0 180 0" scale='0.03 0.03 0.03'>
         </a-entity>
 
+        <Hand 
+          onRotationChange={(newRotation) => this.onChange('hand', newRotation)}
+          onPositionChange={(newPosition) => this.onPositionChange('hand', newPosition)} />
+
         <Camera y={-1.5} 
-          onRotationChange={(newRotation) => this.onChange(newRotation)}
-          onPositionChange={(newPosition) => this.onPositionChange(newPosition)}>
+          onRotationChange={(newRotation) => this.onChange('camera', newRotation)}
+          onPositionChange={(newPosition) => this.onPositionChange('camera', newPosition)}>
           <ToolGroup show={false}/>
         
           <Entity 
