@@ -22,8 +22,9 @@ import Button from './components/button.js'
 
 
 import ToolGroup from './components/ToolGroup.jsx'
-import Camera from './aframe-bindings/Camera.jsx'
+import Camera from './aframe-bindings/CameraContainer.js'
 import Hand from './aframe-bindings/Hand.jsx'
+import UserGhost from './aframe-bindings/UserGhost.jsx'
 
 export default class App extends React.Component {
   
@@ -42,7 +43,19 @@ export default class App extends React.Component {
           z: -1,
         }
       },
-      hand: {
+      handRight: {
+        rotation: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
+        position: {
+          x: 0,
+          y: 0,
+          z: -1,
+        }
+      },
+      handLeft: {
         rotation: {
           x: 0,
           y: 0,
@@ -85,6 +98,7 @@ export default class App extends React.Component {
   }
 
   onPositionChange(key, newPosition) {
+    // this.props.syncHead(newPosition)
     this.setState({
       [key]:{
         ...this.state[key],
@@ -102,24 +116,26 @@ export default class App extends React.Component {
   render () {
     // <a-box color="tomato" depth="100" height="0.1" width="100" position="0 -1 0"></a-box>
     // <a-box color="green" depth="1" height="1" width="1" position="1 0 -1"></a-box> position="-14 -1.7 7"
+    const user = {
+        head: this.state.camera,
+        hands: {
+          left: this.state.handLeft,
+          right: this.state.handRight,
+        }
+    }
     return (
       <Entity>
-        <a-entity gltf-model="url(/head.gltf)" scale='0.001 0.001 0.001' 
-            position={`${this.state.camera.position.x} ${this.state.camera.position.y} ${this.state.camera.position.z}`} 
-            rotation={`${this.state.camera.rotation.x} ${this.state.camera.rotation.y} ${this.state.camera.rotation.z}`}>
-          </a-entity>
-        <a-entity object-model="src: url(/rightHand.json);" 
-          rotation={`${this.state.hand.rotation.x} ${this.state.hand.rotation.y} ${this.state.hand.rotation.z}`}
-          position={`${this.state.hand.position.x} ${this.state.hand.position.y} ${this.state.hand.position.z}`} 
-          animation-mixer="clip: Fist;"></a-entity>
-
-       
-        <a-entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4"  rotation="0 180 0" scale='0.03 0.03 0.03'>
-        </a-entity>
-
+      <a-entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4"  rotation="0 180 0" scale='0.03 0.03 0.03'>
+      </a-entity>
+        <UserGhost user={user}/>
+      
         <Hand 
-          onRotationChange={(newRotation) => this.onChange('hand', newRotation)}
-          onPositionChange={(newPosition) => this.onPositionChange('hand', newPosition)} />
+          onRotationChange={(newRotation) => this.onChange('handRight', newRotation)}
+          onPositionChange={(newPosition) => this.onPositionChange('handRight', newPosition)} />
+        <Hand 
+          side='left'
+          onRotationChange={(newRotation) => this.onChange('handLeft', newRotation)}
+          onPositionChange={(newPosition) => this.onPositionChange('handLeft', newPosition)} />
 
         <Camera y={-1.5} 
           onRotationChange={(newRotation) => this.onChange('camera', newRotation)}

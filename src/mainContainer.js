@@ -1,0 +1,25 @@
+import { connect } from 'react-redux';
+
+//actions
+import { moveHand, moveHead } from './actions'
+
+// Wrapped Component
+import Main from './Main.jsx';
+
+const mapStateToProps = (state: ReduxStateType) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<*>) => ({
+  syncHand: (hand) => {
+    dispatch(moveHand(hand));
+  },
+  syncHead: (head) => {
+    dispatch(moveHead(head));
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Main);

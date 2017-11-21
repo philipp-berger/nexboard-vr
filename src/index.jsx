@@ -26,7 +26,41 @@ import Camera from './aframe-bindings/Camera.jsx'
 
 import Main from './main.jsx'
 
+import {
+  compose,
+  applyMiddleware,
+  createStore,
+} from 'redux';
+import { Provider } from 'react-redux';
+
+import createMiddlewares from './middlewares/';
+import reducers from './reducers/';
+
 var extras = require('aframe-extras');
+
+// Redux
+function makeStore(initialState: ReduxStateType, middlewares: Array<Middleware<*, *, *>>) {
+  let enhancer;
+
+  // If not production
+  if (true) {
+    enhancer = compose(
+      applyMiddleware(...middlewares),
+      window.devToolsExtension ? window.devToolsExtension() : f => f,
+    );
+  } else {
+    enhancer = compose(
+      applyMiddleware(...middlewares),
+    );
+  }
+
+  return createStore(reducers, initialState, enhancer);
+}
+
+// $FlowFixMe flow is not able to resolve the CommonJS exports of dev/prod
+const store = makeStore({}, createMiddlewares());
+
+// let socketConnector = new SocketConnector(store, authInformation.boardId, response.pubKey, authInformation.username);
 
 // Register a single component.
 AFRAME.registerComponent('object-model', extras.loaders["object-model"]);
@@ -36,9 +70,11 @@ class App extends React.Component {
 
   render () {
     return (
-      <Scene stats scene-init>
-        <Main/>
-      </Scene>
+      <Provider store={store}>
+        <Scene stats scene-init>
+          <Main/>
+        </Scene>
+      </Provider>
     )
   }
 }

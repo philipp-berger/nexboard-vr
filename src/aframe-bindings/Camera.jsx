@@ -20,9 +20,11 @@ export default class Camera extends React.Component {
   }
 
   onRotationChange(event) {
+    // console.log8)
     let newRotation = event.detail
     // console.log("New Rotation", newRotation)
     this.props.onRotationChange(newRotation)
+    this.props.syncHead(newRotation);
   }
 
   shouldComponentUpdate(){
