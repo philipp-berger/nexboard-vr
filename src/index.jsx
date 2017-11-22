@@ -24,7 +24,7 @@ import Button from './components/button.js'
 import ToolGroup from './components/ToolGroup.jsx'
 import Camera from './aframe-bindings/Camera.jsx'
 
-import Main from './main.jsx'
+import Main from './mainContainer.js'
 
 import {
   compose,
@@ -35,6 +35,7 @@ import { Provider } from 'react-redux';
 
 import createMiddlewares from './middlewares/';
 import reducers from './reducers/';
+import VrSocketConnector from './network/VrSocketConnector'
 
 var extras = require('aframe-extras');
 
@@ -43,7 +44,7 @@ function makeStore(initialState: ReduxStateType, middlewares: Array<Middleware<*
   let enhancer;
 
   // If not production
-  if (true) {
+  if (false) {
     enhancer = compose(
       applyMiddleware(...middlewares),
       window.devToolsExtension ? window.devToolsExtension() : f => f,
@@ -61,6 +62,7 @@ function makeStore(initialState: ReduxStateType, middlewares: Array<Middleware<*
 const store = makeStore({}, createMiddlewares());
 
 // let socketConnector = new SocketConnector(store, authInformation.boardId, response.pubKey, authInformation.username);
+let vrSocketConnector = VrSocketConnector.init(store);
 
 // Register a single component.
 AFRAME.registerComponent('object-model', extras.loaders["object-model"]);

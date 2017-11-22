@@ -2,6 +2,9 @@ import React from 'React'
 import PropTypes from 'prop-types'
 import {Entity} from 'aframe-react';
 
+//Syncing
+import SocketConnector from '../network/VrSocketConnector'
+
 export default class Camera extends React.Component {
 
   componentDidMount() {
@@ -24,7 +27,7 @@ export default class Camera extends React.Component {
     let newRotation = event.detail
     // console.log("New Rotation", newRotation)
     this.props.onRotationChange(newRotation)
-    this.props.syncHead(newRotation);
+    // SocketConnector.syncHead(newRotation);
   }
 
   shouldComponentUpdate(){

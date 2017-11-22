@@ -5,59 +5,31 @@ import {
   INIT, 
   NEW, CHANGE, CHANGE_FLOW } from './messages'
 
-export default class SocketConnector {
-  constructor(props){
-    this._socket = io()
-    this.initSocketCommunication()
-    this.eventStack = []
+import { addUser, moveHead, moveHand, removeUser, setUserData } from '../actions.js'
 
-    this._onChange = props.onChange
-    this._events = {
-      new: [],
-      change: [],
-      changeFlow: []
-    }
+class SocketConnector {
+  constructor(){
+    // this._socket = io()
   }
 
-  connect(boardId, authKey) {
-      this._socket.emit(AUTHENTICATE, {
-        panelId: boardId,
-        authKey
-      })
-
-      this._socket.on(INIT, (data) => {
-        console.log("Init board with ", data)
-
-        data.wb_data.forEach( (element) => {
-          this.eventStack.push({type: NEW, data:element})
-          this._events.new.forEach( (subscriber) => {
-            subscriber(element)
-          })
-        }
-        )
-      })
+  init(store) {
+    this.store = store;
+    this.syncUser();
   }
 
-  // event can be 'new' / 'change' / 'changeFlow'
-  subscribe(event, callback) {
-    this._events[event].push(callback)
+  syncUser() {
+    this.store.dispatch( addUser(1, {}) )
   }
 
-  emitNew(data) {
-    this._socket.emit(NEW, data)
-  }
-  emitChangeFlow(data) {
-    this._socket.emit(CHANGE_FLOW, data)
-  }
-  emitChange(data) {
-    this._socket.emit(CHANGE, data)
+  syncHead(data) {
+    console.log(data)
+    this.store.dispatch( moveHead(1, data) )
   }
 
-  initSocketCommunication() {
-    this._socket.on(NEW, (data) => {
-      console.log("new", data)
-      onNew(data, this._events.new)
-      // this.eventStack.push({type: NEW, data})
-    })
-  }
 }
+
+
+const instance = new SocketConnector();
+
+export default instance;
+

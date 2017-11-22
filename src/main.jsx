@@ -22,7 +22,7 @@ import Button from './components/button.js'
 
 
 import ToolGroup from './components/ToolGroup.jsx'
-import Camera from './aframe-bindings/CameraContainer.js'
+import Camera from './aframe-bindings/Camera.jsx'
 import Hand from './aframe-bindings/Hand.jsx'
 import UserGhost from './aframe-bindings/UserGhost.jsx'
 
@@ -98,17 +98,20 @@ export default class App extends React.Component {
   }
 
   onPositionChange(key, newPosition) {
-    // this.props.syncHead(newPosition)
-    this.setState({
-      [key]:{
-        ...this.state[key],
-        position: {
-          x: newPosition.x,
-          y: newPosition.y,
-          z: newPosition.z-1,
+    if(key == 'camera'){
+      this.props.syncHead(this.props.user.id, {position: newPosition})
+    }else{
+      this.setState({
+        [key]:{
+          ...this.state[key],
+          position: {
+            x: newPosition.x,
+            y: newPosition.y,
+            z: newPosition.z-1,
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   
@@ -125,8 +128,8 @@ export default class App extends React.Component {
     }
     return (
       <Entity>
-      <a-entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4"  rotation="0 180 0" scale='0.03 0.03 0.03'>
-      </a-entity>
+      <Entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4"  rotation="0 180 0" scale='0.03 0.03 0.03'>
+      </Entity>
         <UserGhost user={user}/>
       
         <Hand 

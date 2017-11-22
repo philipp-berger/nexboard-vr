@@ -8,10 +8,10 @@ const windowSizeMiddleware = (store: Store<*, *>) => {
   return (next: () => void) => next;
 };
 
+export default windowSizeMiddleware
+
 // const installWindowListeners = (store: Store<*, *>) => {
 //   window.addEventListener('resize', () => {
 //     store.dispatch(resizeWindow(window.innerWidth, window.innerHeight));
 //   });
 // };
-
-export default windowSizeMiddleware;

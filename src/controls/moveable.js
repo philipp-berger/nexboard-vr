@@ -41,11 +41,11 @@ AFRAME.registerComponent('moveable', {
          this.lastPosition.y != this.position.y ||
          this.lastPosition.z != this.position.z 
       ){
-        this.lastPosition = new THREE.Vector3(
-          this.position.x,
-          this.position.y,
-          this.position.z
-        )
+        this.lastPosition = {
+          x: this.position.x,
+          y: this.position.y,
+          z: this.position.z
+        }
         this.el.emit('positionChange', this.lastPosition);
       }
       
@@ -55,11 +55,11 @@ AFRAME.registerComponent('moveable', {
         this.lastRotation.z != this.rotation.z 
       ){
         
-        this.lastRotation = new THREE.Vector3(
-          this.rotation.x,
-          this.rotation.y,
-          this.rotation.z
-        )
+        this.lastRotation = {
+          x: this.rotation.x,
+          y: this.rotation.y,
+          z: this.rotation.z
+        }
 
         const heading = convertEulerToDegree(this.lastRotation.y);
         const pitch = convertEulerToDegree(this.lastRotation.x);

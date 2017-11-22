@@ -7,15 +7,16 @@ import { moveHand, moveHead } from './actions'
 import Main from './Main.jsx';
 
 const mapStateToProps = (state: ReduxStateType) => ({
-  user: state.user,
+  users: state.users,
+  user: state.user
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<*>) => ({
-  syncHand: (hand) => {
-    dispatch(moveHand(hand));
+  syncHand: (id, hand) => {
+    dispatch(moveHand(id, hand));
   },
-  syncHead: (head) => {
-    dispatch(moveHead(head));
+  syncHead: (id, head) => {
+    dispatch(moveHead(id, head));
   },
 });
 
