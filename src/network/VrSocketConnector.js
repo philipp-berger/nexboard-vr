@@ -1,3 +1,5 @@
+// @flow 
+
 import io from 'socket.io-client'
 
 import { 
@@ -6,15 +8,21 @@ import {
   NEW, CHANGE, CHANGE_FLOW } from './messages'
 
 import { addUser, moveHead, moveHand, removeUser, setUserData } from '../actions.js'
+import { ADD_USER, REMOVE_USER, MOVE_HAND, MOVE_HEAD } from '../actions.js'
 
 class SocketConnector {
-  constructor(){
-    // this._socket = io()
+
+  socketInit = (data : {id: number} ) => {
+    this.store.dispatch(setUserData(data));
   }
 
   init(store) {
     this.store = store;
-    this.syncUser();
+    
+    this._socket = io(`http://${window.location.hostname}:8888`)
+    this._socket.on('init', this.socketInit);
+    this._socket.on(ADD_USER, (data) => {console.log(data); this.store.dispatch(addUser(data.id, data)) } );
+    this._socket.on(REMOVE_USER, (data) => this.store.dispatch(removeUser(data.id)) );
   }
 
   syncUser() {

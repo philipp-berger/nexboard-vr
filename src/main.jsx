@@ -80,6 +80,10 @@ export default class App extends React.Component {
   componentDidMount(){
   }
 
+  componentWillReceiveProps(n){
+    console.log("new props", n);
+  }
+
   listenTo(hand){
     // console.log(hand,hand.el)
   }
