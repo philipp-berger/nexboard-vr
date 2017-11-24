@@ -4,6 +4,14 @@ const INIT = 'INIT'
 const NEW_USER = 'ADD_USER'
 const REMOVE_USER = 'REMOVE_USER'
 
+// Incoming
+const SYNC_HEAD = 'SYNC_HEAD'
+const SYNC_HAND = 'SYNC_HAND'
+
+// Outgoing
+const MOVE_HEAD = 'MOVE_HEAD'
+const MOVE_HAND = 'MOVE_HAND'
+
 const connectedClients = {}
 
 io.on('connection', function (socket) {
@@ -18,6 +26,20 @@ io.on('connection', function (socket) {
     console.log("Client disconnected", socket.clientId);
     delete connectedClients[socket.clientId];
   });
+
+  socket.on('HELLO', function(data){
+    console.log("HELLO", data);
+    // TODO: Store to db here
+  })
+  socket.on(SYNC_HEAD, function(data){
+    console.log("Sync head", data);
+    socket.broadcast.emit(MOVE_HEAD, data);
+    // TODO: Store to db here
+  })
+  socket.on(SYNC_HAND, function(data){
+    socket.broadcast.emit(MOVE_HAND, data);
+    // TODO: Store to db here
+  })
 });
 
 

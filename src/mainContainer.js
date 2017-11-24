@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 //actions
-import { moveHand, moveHead } from './actions'
+import { moveHand, moveHead, syncHead } from './actions'
 
 // Wrapped Component
 import Main from './Main.jsx';
@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch: Dispatch<*>) => ({
     dispatch(moveHand(id, hand));
   },
   syncHead: (id, head) => {
-    dispatch(moveHead(id, head));
+    dispatch(syncHead(id, head));
   },
 });
 

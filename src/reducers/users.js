@@ -47,7 +47,7 @@ const user = (state = userInitialState, action) => {
   }
 }
 
-const users = (state = [], action) => {
+const users = (state = {}, action) => {
   switch(action.type){
     case ADD_USER:
       return {

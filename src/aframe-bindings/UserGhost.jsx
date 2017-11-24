@@ -6,9 +6,9 @@ export default class UserGhost extends React.Component {
 
   render() {
     return (
-      <Entity rotation="0 180 0" position="0 0 -2">
+      <Entity rotation="0 180 0" position="0 1 -2">
         <Entity gltf-model="url(/head.gltf)" scale='0.001 0.001 0.001'
-          position={`${this.props.user.head.position.x} ${this.props.user.head.position.y} ${this.props.user.head.position.z}`}
+          position={`${this.props.user.head.position.x} ${this.props.user.head.position.y}+1 ${this.props.user.head.position.z}`}
           rotation={`${this.props.user.head.rotation.x} ${this.props.user.head.rotation.y} ${this.props.user.head.rotation.z}`}>
         </Entity>
         <Entity object-model="src: url(/rightHand.json);"

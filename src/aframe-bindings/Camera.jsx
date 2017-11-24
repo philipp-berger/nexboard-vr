@@ -18,6 +18,7 @@ export default class Camera extends React.Component {
 
   onPositionChange(event) {
     let newPosition = event.detail;
+    delete newPosition['target']
     // console.log("New Position", newPosition)
     this.props.onPositionChange(newPosition)
   }
@@ -25,6 +26,7 @@ export default class Camera extends React.Component {
   onRotationChange(event) {
     // console.log8)
     let newRotation = event.detail
+    delete newRotation['target']
     // console.log("New Rotation", newRotation)
     this.props.onRotationChange(newRotation)
     // SocketConnector.syncHead(newRotation);

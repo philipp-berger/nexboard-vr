@@ -26,6 +26,8 @@ import Camera from './aframe-bindings/Camera.jsx'
 import Hand from './aframe-bindings/Hand.jsx'
 import UserGhost from './aframe-bindings/UserGhost.jsx'
 
+import debounce from 'lodash.debounce'
+
 export default class App extends React.Component {
   
   constructor(props){
@@ -68,6 +70,7 @@ export default class App extends React.Component {
         }
       }
     }
+    this.sync = debounce(this.syncHead, 15);
   }
 
   changeColor() {
@@ -89,32 +92,37 @@ export default class App extends React.Component {
   }
 
   onChange(key, newRotation) {
-    this.setState({
-      [key]:{
-        ...this.state[key],
-        rotation: {
-          x: newRotation.x,
-          y: newRotation.y,
-          z: newRotation.z,
-        }
-      }
-    })
+    // this.setState({
+    //   [key]:{
+    //     ...this.state[key],
+    //     rotation: {
+    //       x: newRotation.x,
+    //       y: newRotation.y,
+    //       z: newRotation.z,
+    //     }
+    //   }
+    // })
+  }
+
+  syncHead(id, data){
+    // console.log("Syncing now", id, data)
+    this.props.syncHead(id, data)
   }
 
   onPositionChange(key, newPosition) {
     if(key == 'camera'){
-      this.props.syncHead(this.props.user.id, {position: newPosition})
+      this.sync(this.props.user.id, {position: newPosition})
     }else{
-      this.setState({
-        [key]:{
-          ...this.state[key],
-          position: {
-            x: newPosition.x,
-            y: newPosition.y,
-            z: newPosition.z-1,
-          }
-        }
-      })
+      // this.setState({
+      //   [key]:{
+      //     ...this.state[key],
+      //     position: {
+      //       x: newPosition.x,
+      //       y: newPosition.y,
+      //       z: newPosition.z-1,
+      //     }
+      //   }
+      // })
     }
   }
 
@@ -134,7 +142,12 @@ export default class App extends React.Component {
       <Entity>
       <Entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4"  rotation="0 180 0" scale='0.03 0.03 0.03'>
       </Entity>
-        <UserGhost user={user}/>
+          {
+            Object.keys(this.props.users).forEach( (userId) => {
+              console.log("render user", userId, this.props.users[userId])
+              return (<UserGhost user={this.props.users[userId]} key={userId}/>)
+          })
+          }
       
         <Hand 
           onRotationChange={(newRotation) => this.onChange('handRight', newRotation)}
