@@ -28,14 +28,20 @@ const user = (state = userInitialState, action) => {
         ...state,
         hands: {
           ...state.hands,
-          [action.payload.side]: action.payload.data
+          [action.payload.side]: {
+            ...state.hands[action.payload.side],
+            ...action.payload.data,
+          }
         }
       }
     case MOVE_HEAD:
       delete action.payload.data.target
       return {
         ...state,
-        head: action.payload.data
+        head: {
+          ...state.head,
+          ...action.payload.data
+        }
       }
     case ADD_USER:
       return {

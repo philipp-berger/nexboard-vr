@@ -11,7 +11,7 @@ const lastAction = (state = null, action: ReduxActionType) => {
 };
 
 export default combineReducers({
-  lastAction,
+  // lastAction,
   users,
   user
 });

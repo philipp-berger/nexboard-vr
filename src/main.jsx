@@ -13,7 +13,7 @@ import './components/scene-init';
 import './controls/moveable';
 
 
-import {Entity, Scene} from 'aframe-react';
+import { Entity, Scene } from 'aframe-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -29,8 +29,8 @@ import UserGhost from './aframe-bindings/UserGhost.jsx'
 import debounce from 'lodash.debounce'
 
 export default class App extends React.Component {
-  
-  constructor(props){
+
+  constructor(props) {
     super(props)
     this.state = {
       camera: {
@@ -80,18 +80,21 @@ export default class App extends React.Component {
     });
   }
 
-  componentDidMount(){
+  componentDidMount() {
   }
 
-  componentWillReceiveProps(n){
-    console.log("new props", n);
+  componentWillReceiveProps(n) {
+    // console.log("new props", n);
   }
 
-  listenTo(hand){
+  listenTo(hand) {
     // console.log(hand,hand.el)
   }
 
   onChange(key, newRotation) {
+    if (key == 'camera') {
+      this.sync(this.props.user.id, { rotation: newRotation })
+    }
     // this.setState({
     //   [key]:{
     //     ...this.state[key],
@@ -104,15 +107,15 @@ export default class App extends React.Component {
     // })
   }
 
-  syncHead(id, data){
+  syncHead(id, data) {
     // console.log("Syncing now", id, data)
     this.props.syncHead(id, data)
   }
 
   onPositionChange(key, newPosition) {
-    if(key == 'camera'){
-      this.sync(this.props.user.id, {position: newPosition})
-    }else{
+    if (key == 'camera') {
+      this.sync(this.props.user.id, { position: newPosition })
+    } else {
       // this.setState({
       //   [key]:{
       //     ...this.state[key],
@@ -126,54 +129,54 @@ export default class App extends React.Component {
     }
   }
 
-  
 
-  render () {
+
+  render() {
     // <a-box color="tomato" depth="100" height="0.1" width="100" position="0 -1 0"></a-box>
     // <a-box color="green" depth="1" height="1" width="1" position="1 0 -1"></a-box> position="-14 -1.7 7"
     const user = {
-        head: this.state.camera,
-        hands: {
-          left: this.state.handLeft,
-          right: this.state.handRight,
-        }
+      head: this.state.camera,
+      hands: {
+        left: this.state.handLeft,
+        right: this.state.handRight,
+      }
     }
     return (
       <Entity>
-      <Entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4"  rotation="0 180 0" scale='0.03 0.03 0.03'>
-      </Entity>
-          {
-            Object.keys(this.props.users).forEach( (userId) => {
-              console.log("render user", userId, this.props.users[userId])
-              return (<UserGhost user={this.props.users[userId]} key={userId}/>)
+        <Entity gltf-model="url(/scene.gltf)" position="13 -1.7 -4" rotation="0 180 0" scale='0.03 0.03 0.03'>
+        </Entity>
+        {
+          Object.keys(this.props.users).map((userId) => {
+            console.log("render user", userId, this.props.users[userId])
+            return (<UserGhost user={this.props.users[userId]} key={userId} />)
           })
-          }
-      
-        <Hand 
+        }
+
+        <Hand
           onRotationChange={(newRotation) => this.onChange('handRight', newRotation)}
           onPositionChange={(newPosition) => this.onPositionChange('handRight', newPosition)} />
-        <Hand 
+        <Hand
           side='left'
           onRotationChange={(newRotation) => this.onChange('handLeft', newRotation)}
           onPositionChange={(newPosition) => this.onPositionChange('handLeft', newPosition)} />
 
-        <Camera y={-1.5} 
+        <Camera y={-1.5}
           onRotationChange={(newRotation) => this.onChange('camera', newRotation)}
           onPositionChange={(newPosition) => this.onPositionChange('camera', newPosition)}>
-          <ToolGroup show={false}/>
-        
-          <Entity 
-              primitive="a-cursor" 
-              cursor="fuse: true; fuseTimeout: 3000" 
-              aabb-collider="objects: .interactable"
-              rotation="70 0 20"
-              geometry="primitive: cone; radiusBottom: 0.01; radiusTop: 0.001; height: 0.1"
-              position="0 0 -1">
-              <a-animation begin="cursor-hovering" easing="ease-in" attribute="scale" dur="3000"
-                fill="forwards" from="1 1 1" to="0.1 0.1 0.1"></a-animation>
+          <ToolGroup show={false} />
+
+          <Entity
+            primitive="a-cursor"
+            cursor="fuse: true; fuseTimeout: 3000"
+            aabb-collider="objects: .interactable"
+            rotation="70 0 20"
+            geometry="primitive: cone; radiusBottom: 0.01; radiusTop: 0.001; height: 0.1"
+            position="0 0 -1">
+            <a-animation begin="cursor-hovering" easing="ease-in" attribute="scale" dur="3000"
+              fill="forwards" from="1 1 1" to="0.1 0.1 0.1"></a-animation>
           </Entity>
-            {<Entity raycaster="objects: .grabbable; near: 0.1" grab></Entity>}
-        </Camera> 
+          {<Entity raycaster="objects: .grabbable; near: 0.1" grab></Entity>}
+        </Camera>
       </Entity>
     )
   }

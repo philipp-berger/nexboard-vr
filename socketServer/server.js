@@ -31,6 +31,8 @@ io.on('connection', function (socket) {
     console.log("HELLO", data);
     // TODO: Store to db here
   })
+
+  // Data: {id: number, data: { position: Object, rotation: Object} }
   socket.on(SYNC_HEAD, function(data){
     console.log("Sync head", data);
     socket.broadcast.emit(MOVE_HEAD, data);
@@ -53,4 +55,18 @@ function onConnection(socket) {
   socket.broadcast.emit(NEW_USER, { id: newClientId });
 
   console.log("client with id connected", newClientId, socket.rooms);
+}
+
+function inverseValues(data){
+  let _data = data;
+  if(data.position)
+   Object.keys(data.position).forEach( (key) => {
+     _data.position[key] = _data.position[key] * -1
+  })
+  if(data.rotation)
+   Object.keys(data.rotation).forEach( (key) => {
+     _data.rotation[key] = 180 + _data.rotation[key] * -1
+     console.log("transform key", key, data, _data)
+  })
+  return _data
 }
