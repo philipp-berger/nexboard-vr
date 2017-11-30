@@ -27,10 +27,10 @@ class SocketConnector {
 
     this._socket = io(`http://${window.location.hostname}:8888`)
     this._socket.on('init', this.socketInit);
-    this._socket.on(ADD_USER, (data) => {console.log(data); this.store.dispatch(addUser(data.id, data)) } );
+    this._socket.on(ADD_USER, (data) => {this.store.dispatch(addUser(data.id, data)) } );
     this._socket.on(REMOVE_USER, (data) => this.store.dispatch(removeUser(data.id)) );
-    this._socket.on(MOVE_HEAD, ({id, side, data}) => this.store.dispatch(moveHead(id, data)) );
-    this._socket.on(MOVE_HAND, ({id, side, data}) => this.store.dispatch(moveHand(id, side, data)) );
+    this._socket.on(MOVE_HEAD, ({id, side, data}) => id > -1 ? this.store.dispatch(moveHead(id, data)) : null );
+    this._socket.on(MOVE_HAND, ({id, side, data}) => id > -1 ? this.store.dispatch(moveHand(id, side, data)) : null );
     // this._socket.emit("HELLO", {1: 2, 3: 4})
   }
 
