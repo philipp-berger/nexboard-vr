@@ -72,15 +72,15 @@ export default class App extends React.Component {
       }
     }
     this.sync = debounce(this.syncHead, 35);
-    this.syncHeadThrottled = throttle((id, data) => {
+    this.syncHeadThrottled = (id, data) => { // throttle((id, data) => {
       this.props.syncHead(id, data);
-    }, 30);
-    this.syncLeftHandThrottled = throttle((id, data) => {
+    } //, 30);
+    this.syncLeftHandThrottled = (id, data) => { // throttle((id, data) => {
       this.props.syncHand(id, "left", data);
-    }, 30);
-    this.syncRightHandThrottled = throttle( (id, data) => {
+    } //, 30);
+    this.syncRightHandThrottled =  (id, data) => { //throttle( (id, data) => {
       this.props.syncHand(id, "right", data);
-    }, 30);
+    } //, 30);
     // this.syncHeadBounced = this.syncHead
   }
 

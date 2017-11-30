@@ -31,10 +31,10 @@ AFRAME.registerComponent('moveable', {
 
     this.positionChange = throttle( (pos) => {
       this.el.emit('positionChange', pos);
-    }, 70 );
+    }, 33 );
     this.rotationChange = throttle( (rot) => {
       this.el.emit('rotationChange', rot);
-    }, 70 );
+    }, 33 );
   },
   
   /**
