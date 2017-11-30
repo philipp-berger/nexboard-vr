@@ -15,13 +15,15 @@ export default class Hand extends React.Component {
 
   onPositionChange(event) {
     let newPosition = event.detail;
-    newPosition.y -= 1.3;
+    // newPosition.y -= 1.3;
     // console.log("New Position", newPosition)
+    delete newPosition['target']
     this.props.onPositionChange(newPosition)
   }
 
   onRotationChange(event) {
     let newRotation = event.detail
+    delete newRotation['target']
     // console.log("New Rotation", newRotation)
     this.props.onRotationChange(newRotation)
   }

@@ -34,11 +34,12 @@ io.on('connection', function (socket) {
 
   // Data: {id: number, data: { position: Object, rotation: Object} }
   socket.on(SYNC_HEAD, function(data){
-    console.log("Sync head", data);
+    // console.log("Sync Head", data)
     socket.broadcast.emit(MOVE_HEAD, data);
     // TODO: Store to db here
   })
   socket.on(SYNC_HAND, function(data){
+    // console.log("Sync Hande", data)
     socket.broadcast.emit(MOVE_HAND, data);
     // TODO: Store to db here
   })
@@ -66,7 +67,6 @@ function inverseValues(data){
   if(data.rotation)
    Object.keys(data.rotation).forEach( (key) => {
      _data.rotation[key] = 180 + _data.rotation[key] * -1
-     console.log("transform key", key, data, _data)
   })
   return _data
 }

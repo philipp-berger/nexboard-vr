@@ -27,6 +27,7 @@ import Hand from './aframe-bindings/Hand.jsx'
 import UserGhost from './aframe-bindings/UserGhost.jsx'
 
 import debounce from 'lodash.debounce'
+import throttle from 'lodash.throttle'
 
 export default class App extends React.Component {
 
@@ -70,7 +71,17 @@ export default class App extends React.Component {
         }
       }
     }
-    this.sync = debounce(this.syncHead, 15);
+    this.sync = debounce(this.syncHead, 35);
+    this.syncHeadThrottled = throttle((id, data) => {
+      this.props.syncHead(id, data);
+    }, 30);
+    this.syncLeftHandThrottled = throttle((id, data) => {
+      this.props.syncHand(id, "left", data);
+    }, 30);
+    this.syncRightHandThrottled = throttle( (id, data) => {
+      this.props.syncHand(id, "right", data);
+    }, 30);
+    // this.syncHeadBounced = this.syncHead
   }
 
   changeColor() {
@@ -92,42 +103,46 @@ export default class App extends React.Component {
   }
 
   onChange(key, newRotation) {
-    if (key == 'camera') {
-      this.sync(this.props.user.id, { rotation: newRotation })
+    // console.log("Rot change", key, newRotation)
+    // this.sync(key, this.props.user.id, { rotation: newRotation })
+    // this.syncHead(key, this.props.user.id, { rotation: newRotation });
+    if(key == 'camera'){
+      this.syncHeadThrottled(this.props.user.id, { rotation: newRotation })
+    }else if( key == 'handLeft'){
+      this.syncLeftHandThrottled (this.props.user.id, { rotation: newRotation })
+    }else{
+      this.syncRightHandThrottled (this.props.user.id, { rotation: newRotation })
     }
-    // this.setState({
-    //   [key]:{
-    //     ...this.state[key],
-    //     rotation: {
-    //       x: newRotation.x,
-    //       y: newRotation.y,
-    //       z: newRotation.z,
-    //     }
-    //   }
-    // })
   }
-
-  syncHead(id, data) {
-    // console.log("Syncing now", id, data)
-    this.props.syncHead(id, data)
-  }
-
+  
   onPositionChange(key, newPosition) {
-    if (key == 'camera') {
-      this.sync(this.props.user.id, { position: newPosition })
-    } else {
-      // this.setState({
-      //   [key]:{
-      //     ...this.state[key],
-      //     position: {
-      //       x: newPosition.x,
-      //       y: newPosition.y,
-      //       z: newPosition.z-1,
-      //     }
-      //   }
-      // })
+    // console.log("Pos change", key, newPosition)
+    if(key == 'camera'){
+      this.syncHeadThrottled(this.props.user.id, { position: newPosition })
+    }else if( key == 'handLeft'){
+      this.syncLeftHandThrottled (this.props.user.id, { position: newPosition })
+    }else{
+      this.syncRightHandThrottled (this.props.user.id, { position: newPosition })
+    }
+    // this.syncHead(key, this.props.user.id, { position: newPosition });
+  }
+
+  syncHead(key, id, data) {
+    switch (key) {
+      case "camera":
+        this.props.syncHead(id, data);
+        break;
+      case "handLeft":
+        this.props.syncHand(id, "left", data);
+          break;
+      case "handRight":
+        this.props.syncHand(id, "right", data);
+        break;
+      default: 
+        break;
     }
   }
+
 
 
 
@@ -151,10 +166,11 @@ export default class App extends React.Component {
             return (<UserGhost user={this.props.users[userId]} key={userId} />)
           })
         }
-
+        
         <Hand
           onRotationChange={(newRotation) => this.onChange('handRight', newRotation)}
           onPositionChange={(newPosition) => this.onPositionChange('handRight', newPosition)} />
+        
         <Hand
           side='left'
           onRotationChange={(newRotation) => this.onChange('handLeft', newRotation)}
@@ -177,6 +193,7 @@ export default class App extends React.Component {
           </Entity>
           {<Entity raycaster="objects: .grabbable; near: 0.1" grab></Entity>}
         </Camera>
+
       </Entity>
     )
   }

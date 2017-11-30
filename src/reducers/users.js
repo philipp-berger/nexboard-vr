@@ -56,6 +56,7 @@ const user = (state = userInitialState, action) => {
 const users = (state = {}, action) => {
   switch(action.type){
     case ADD_USER:
+      if(action.payload.id > -1) return {...state};
       return {
         ...state,
         [action.payload.id]: user(undefined, action),

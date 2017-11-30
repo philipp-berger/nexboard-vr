@@ -54,8 +54,8 @@ class App extends React.Component {
         {/*Controllers*/}
         <Entity position="0 -2 0">
            {/* <Entity hand-controls="left" class="hand" aabb-collider="objects: .grabbable;" grab></Entity> */}
-            {/* <Entity ref={this.listenTo} hand-controls="right" class="hand" aabb-collider="objects: .grabbable;" grab> */}
-                                                              {/*<Entity raycaster="objects: .grabbable; near: 0.1" position="0 -0.5 0" rotation="90 0 0"></Entity>*/}
+            <Entity ref={this.listenTo} hand-controls="right" class="hand" aabb-collider="objects: .grabbable;" grab>
+                                                              <Entity raycaster="objects: .grabbable; near: 0.1" position="0 -0.5 0" rotation="90 0 0"></Entity>
                                                               {/*<Entity raycaster="objects: .grabbable; near: 0; far: 0.2" position="-0.04 0.01 0" animation__click={{property: 'scale', startEvents: 'click', from: '0.1 0.1 0.1', to: '1 1 1', dur: 150}}></Entity>*/}
               {/* <Entity 
                 primitive="a-cursor"
@@ -65,8 +65,8 @@ class App extends React.Component {
                 position="-0.04 0.01 -0.5">
                   <a-animation begin="cursor-hovering" easing="ease-in" attribute="scale" dur="3000"
                   fill="forwards" from="1 1 1" to="0.1 0.1 0.1"></a-animation>
-              </Entity>
-            </Entity> */}
+              </Entity>*/}
+            </Entity> 
         </Entity>
 
         {/*<Entity primitive="a-plane" src="#groundTexture" rotation="-90 0 0" height="100" width="100"/>*/}
@@ -75,7 +75,7 @@ class App extends React.Component {
         {/*<Entity primitive="a-sky" height="2048" radius="40" src="#skyTexture" theta-length="90" width="2048"/>*/}
         <Entity primitive="a-sphere" src="#sphereTexture" material="side: double" radius="20" position="0 0 0 "></Entity>
         
-        {/*<Start></Start>*/}
+        <Start></Start>
         <Button position={{x: 0, y: 0, z: 0}}></Button>
 
         <Entity text={{value: 'Hello, A-Frame React!', align: 'center', color: '#85ccfd'}} position={{x: 0, y: 2, z: -1}} />
